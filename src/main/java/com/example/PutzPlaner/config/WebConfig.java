@@ -13,6 +13,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry
                 .addMapping("/**")
                 .allowedMethods("*")
-                .allowedOrigins("http://localhost:5173", "mein Render Link");
+                .allowedOrigins("http://localhost:5173", "https://putzplaner-frontend.onrender.com/");
     }
 }
