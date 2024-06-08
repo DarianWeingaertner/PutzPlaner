@@ -19,7 +19,6 @@ public class CleaningTaskController {
     public CleaningTaskController(CleaningTaskService cleaningTaskService) {
         this.cleaningTaskService = cleaningTaskService;
     }
-    @CrossOrigin
     @GetMapping("/all")
     public ResponseEntity<List<CleaningTaskWithId>> getAllCleaningTasks() {
         List<CleaningTaskWithId> tasks = cleaningTaskService.getCleaningTasks();
