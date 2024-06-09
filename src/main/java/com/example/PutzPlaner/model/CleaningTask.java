@@ -1,20 +1,20 @@
 package com.example.PutzPlaner.model;
 
 public class CleaningTask {
-    private String bezeichung;
+    private String bezeichnung;
     private String person;
     private boolean isClean;
     private int daysToClean;
 
     public CleaningTask(String bezeichnung, String person, boolean isClean, int daysToClean) {
-        this.bezeichung = bezeichnung;
+        this.bezeichnung = bezeichnung;
         this.person = person;
         this.isClean = isClean;
         this.daysToClean = daysToClean;
     }
 
-    public String getBezeichung() {
-        return bezeichung;
+    public String getBezeichnung() {
+        return bezeichnung;
     }
 
     public String getPerson() {
@@ -29,8 +29,8 @@ public class CleaningTask {
         return daysToClean;
     }
 
-    public void setBezeichung(String bezeichung) {
-        this.bezeichung = bezeichung;
+    public void setBezeichnung(String bezeichnung) {
+        this.bezeichnung = bezeichnung;
     }
 
     public void setPerson(String person) {

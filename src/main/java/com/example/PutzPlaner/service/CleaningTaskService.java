@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.HashMap;
 
 @Service
 
@@ -29,7 +28,7 @@ public class CleaningTaskService {
 
     public CleaningTaskWithId addCleaningTask(final CleaningTask cleaningTask) {
         final long id = currentId++;
-        final CleaningTaskWithId cleaningTaskWithId = new CleaningTaskWithId(cleaningTask.getBezeichung(), cleaningTask.getPerson(), cleaningTask.isClean(), cleaningTask.getDaysToClean(), id);
+        final CleaningTaskWithId cleaningTaskWithId = new CleaningTaskWithId(cleaningTask.getBezeichnung(), cleaningTask.getPerson(), cleaningTask.isClean(), cleaningTask.getDaysToClean(), id);
         data.put(id, cleaningTaskWithId);
         return cleaningTaskWithId;
     }
@@ -37,7 +36,7 @@ public class CleaningTaskService {
     public CleaningTaskWithId editCleaningTask(Long id, CleaningTask cleaningTask) {
         CleaningTaskWithId existingTask = data.get(id);
         if (existingTask == null) return null;
-        existingTask.setBezeichung(cleaningTask.getBezeichung());
+        existingTask.setBezeichnung(cleaningTask.getBezeichnung());
         existingTask.setPerson(cleaningTask.getPerson());
         existingTask.setClean(cleaningTask.isClean());
         existingTask.setDaysToClean(cleaningTask.getDaysToClean());
