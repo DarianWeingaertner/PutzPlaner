@@ -26,7 +26,7 @@ public class CleaningTaskService {
     public Iterable<CleaningTask> getCleaningTask(final String affiliation) {
         final Iterable<CleaningTask> data = this.repository.findAll();
         return StreamSupport.stream(data.spliterator(), false)
-                .filter(h -> h.getAffiliation() != null && h.getAffiliation().equalsIgnoreCase(affiliation))
+                .filter(c -> c.getBezeichnung() != null && c.getBezeichnung().equalsIgnoreCase(affiliation))
                 .collect(Collectors.toSet());
     }
 

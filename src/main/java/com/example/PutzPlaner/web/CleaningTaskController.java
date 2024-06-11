@@ -1,13 +1,16 @@
 package com.example.PutzPlaner.web;
 
 import com.example.PutzPlaner.model.CleaningTask;
-import com.example.PutzPlaner.model.CleaningTaskWithId;
 import com.example.PutzPlaner.service.CleaningTaskService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -16,36 +19,37 @@ public class CleaningTaskController {
 
     private final CleaningTaskService cleaningTaskService;
 
-    public CleaningTaskController(CleaningTaskService cleaningTaskService) {
-        this.cleaningTaskService = cleaningTaskService;
-    }
-    @GetMapping("/all")
-    public ResponseEntity<List<CleaningTaskWithId>> getAllCleaningTasks() {
-        List<CleaningTaskWithId> tasks = cleaningTaskService.getCleaningTasks();
-        return ResponseEntity.ok(tasks);
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Iterable<CleaningTask>> getCleaningTask(@RequestParam final Optional<String> affiliation) {
+        final Iterable<CleaningTask> result = affiliation.isEmpty() || affiliation.get().isBlank()
+                ? cleaningTaskService.getCleaningTask();
+                : cleaningTaskService.getCleaningTask(affiliation.get());
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CleaningTaskWithId> getCleaningTaskById(@PathVariable("id") Long id) {
-        CleaningTaskWithId task = cleaningTaskService.getCleaningTask(id);
-        return task != null ? ResponseEntity.ok(task) : ResponseEntity.notFound().build();
+    public ResponseEntity<CleaningTask> getCleaningTask(@PathVariable("id") final Long id) {
+        final Optional<CleaningTask> found = cleaningTaskService.getCleaningTask(id);
+        return found.isPresent() ? ResponseEntity.ok(found.get()) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    public ResponseEntity<CleaningTaskWithId> addCleaningTask(@RequestBody CleaningTask task) {
-        CleaningTaskWithId newTask = cleaningTaskService.addCleaningTask(task);
-        return new ResponseEntity<>(newTask, HttpStatus.CREATED);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CleaningTask> addCleaningTask(@Valid @RequestBody CleaningTask body) {
+        final CleaningTask c = new CleaningTask(body.getPerson(), body.getBezeichnung(), body.getDaysToClean());
+        final CleaningTask createdCleaningTask = cleaningTaskService.addCleaningTask(c);
+        return new ResponseEntity<>(createdCleaningTask, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CleaningTaskWithId> updateCleaningTask(@PathVariable("id") Long id, @RequestBody CleaningTask task) {
-        CleaningTaskWithId updatedTask = cleaningTaskService.editCleaningTask(id, task);
-        return updatedTask != null ? ResponseEntity.ok(updatedTask) : ResponseEntity.notFound().build();
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CleaningTask> updateCleaningTask(@PathVariable("id") final Long id, @RequestBody CleaningTask body) {
+        body.setId(id);
+        final CleaningTask updateCleaningTask = cleaningTaskService.editCleaningTask(body);
+        if (updateCleaningTask == null) return ResponseEntity.notFound().build();
+        else return ResponseEntity.ok(updateCleaningTask);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCleaningTask(@PathVariable("id") Long id) {
-        boolean isRemoved = cleaningTaskService.removeCleaningTask(id);
-        return isRemoved ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> deleteCleaningTask(@PathVariable("id") final Long id) {
+        return cleaningTaskService.removeCleaningTask(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }
