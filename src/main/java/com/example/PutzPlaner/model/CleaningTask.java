@@ -10,7 +10,6 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
 @AllArgsConstructor
 public class CleaningTask {
     @Id
@@ -19,6 +18,8 @@ public class CleaningTask {
     private String bezeichnung;
     private String person;
     private int daysToClean;
+
+    public CleaningTask() {}
 
     public CleaningTask(String bezeichnung, String person, int daysToClean) {
         this.bezeichnung = bezeichnung;
