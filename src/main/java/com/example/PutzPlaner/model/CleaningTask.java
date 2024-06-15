@@ -14,7 +14,7 @@ import lombok.*;
 @AllArgsConstructor
 public class CleaningTask {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String bezeichnung;
     private String person;
