@@ -35,7 +35,7 @@ public class CleaningTaskController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CleaningTask> addCleaningTask(@Valid @RequestBody CleaningTask body) {
-        final CleaningTask c = new CleaningTask(body.getPerson(), body.getBezeichnung(), body.getDaysToClean());
+        final CleaningTask c = new CleaningTask(body.getBezeichnung(),body.getPerson(), body.getDaysToClean());
         final CleaningTask createdCleaningTask = cleaningTaskService.addCleaningTask(c);
         return new ResponseEntity<>(createdCleaningTask, HttpStatus.CREATED);
     }

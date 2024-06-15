@@ -23,10 +23,10 @@ public class CleaningTaskService {
         return this.repository.findAll();
     }
 
-    public Iterable<CleaningTask> getCleaningTask(final String affiliation) {
+    public Iterable<CleaningTask> getCleaningTask(final String bezeichnung) {
         final Iterable<CleaningTask> data = this.repository.findAll();
         return StreamSupport.stream(data.spliterator(), false)
-                .filter(c -> c.getBezeichnung() != null && c.getBezeichnung().equalsIgnoreCase(affiliation))
+                .filter(c -> c.getBezeichnung() != null && c.getBezeichnung().equalsIgnoreCase(bezeichnung))
                 .collect(Collectors.toSet());
     }
 
