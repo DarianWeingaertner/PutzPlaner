@@ -2,6 +2,7 @@ package com.example.PutzPlaner.web;
 
 import com.example.PutzPlaner.model.CleaningTask;
 import com.example.PutzPlaner.service.CleaningTaskService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,21 +10,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin
-@RestController
+@Controller
+@AllArgsConstructor
 @RequestMapping("/cleaningTasks")
 public class CleaningTaskController {
 
     private final CleaningTaskService cleaningTaskService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Iterable<CleaningTask>> getCleaningTask(@RequestParam final Optional<String> affiliation) {
-        final Iterable<CleaningTask> result = affiliation.isEmpty() || affiliation.get().isBlank()
-                ? cleaningTaskService.getCleaningTask();
-                : cleaningTaskService.getCleaningTask(affiliation.get());
+    public ResponseEntity<Iterable<CleaningTask>> getCleaningTask(@RequestParam final Optional<String> bezeichnung) {
+        final Iterable<CleaningTask> result = bezeichnung.isEmpty() || bezeichnung.get().isBlank()
+                ? cleaningTaskService.getCleaningTask()
+                : cleaningTaskService.getCleaningTask(bezeichnung.get());
         return ResponseEntity.ok(result);
     }
 
