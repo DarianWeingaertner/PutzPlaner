@@ -36,7 +36,7 @@ public class CleaningTaskController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CleaningTask> addCleaningTask(@Valid @RequestBody CleaningTask body) {
-        final CleaningTask c = new CleaningTask(body.getBezeichnung(),body.getPerson(), body.getDaysToClean());
+        final CleaningTask c = new CleaningTask(body.getBezeichnung(), body.getPerson(), body.getDaysToClean());
         final CleaningTask createdCleaningTask = cleaningTaskService.addCleaningTask(c);
         return new ResponseEntity<>(createdCleaningTask, HttpStatus.CREATED);
     }
@@ -54,14 +54,20 @@ public class CleaningTaskController {
         return cleaningTaskService.removeCleaningTask(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
-    @PatchMapping("/{id}/complete")
+    @PutMapping(path = "/{id}/complete")
     public ResponseEntity<CleaningTask> completeTask(@PathVariable("id") Long id) {
-        CleaningTask completedTask = cleaningTaskService.markTaskAsCompleted(id);
-        return completedTask != null ? ResponseEntity.ok(completedTask) : ResponseEntity.notFound().build();
+        CleaningTask updatedTask = cleaningTaskService.markTaskAsCompleted(id);
+        if (updatedTask != null) {
+            return ResponseEntity.ok(updatedTask);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
-
-    @GetMapping("/completed")
+/*
+    @GetMapping(path = "/completed")
     public ResponseEntity<List<CleaningTask>> getCompletedTasks() {
         return ResponseEntity.ok(cleaningTaskService.getCompletedTasks());
     }
+
+ */
 }

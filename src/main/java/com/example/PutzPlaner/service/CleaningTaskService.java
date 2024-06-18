@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-
 @Service
 public class CleaningTaskService {
     @Autowired
@@ -49,12 +48,14 @@ public class CleaningTaskService {
 
     public CleaningTask markTaskAsCompleted(Long id) {
         return repository.findById(id).map(task -> {
-            task.setIsCompleted();
+            task.setCompleted(true);
             return repository.save(task);
         }).orElse(null);
     }
-
+/*
     public List<CleaningTask> getCompletedTasks() {
-        return repository.findByIsCompleted(true);
+        return repository.findByCompleted(true);
     }
+
+ */
 }

@@ -18,7 +18,7 @@ public class CleaningTask {
     private String bezeichnung;
     private String person;
     private int daysToClean;
-    private boolean isCompleted = false;
+    private boolean completed = false;
 
     public CleaningTask() {}
 
@@ -26,10 +26,7 @@ public class CleaningTask {
         this.bezeichnung = bezeichnung;
         this.person = person;
         this.daysToClean = daysToClean;
-        this.isCompleted = false;
-    }
-    public void setIsCompleted(){
-        this.isCompleted = true;
+        this.completed = false;
     }
 }
 

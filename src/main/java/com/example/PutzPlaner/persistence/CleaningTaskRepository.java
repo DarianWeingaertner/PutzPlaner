@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface CleaningTaskRepository extends JpaRepository<CleaningTask, Long> {
-    List<CleaningTask> findByIsCompleted(boolean isCompleted);
+    List<CleaningTask> findByCompleted(boolean completed);
 }
 
