@@ -5,6 +5,7 @@ import com.example.PutzPlaner.persistence.CleaningTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -44,5 +45,16 @@ public class CleaningTaskService {
         final boolean exists = repository.existsById(id);
         if (exists) repository.deleteById(id);
         return exists;
+    }
+
+    public CleaningTask markTaskAsCompleted(Long id) {
+        return repository.findById(id).map(task -> {
+            task.setIsCompleted();
+            return repository.save(task);
+        }).orElse(null);
+    }
+
+    public List<CleaningTask> getCompletedTasks() {
+        return repository.findByIsCompleted(true);
     }
 }
