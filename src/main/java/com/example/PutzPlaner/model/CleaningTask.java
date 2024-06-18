@@ -18,12 +18,18 @@ public class CleaningTask {
     private String bezeichnung;
     private String person;
     private int daysToClean;
+    private boolean isCompleted;
 
     public CleaningTask() {}
 
-    public CleaningTask(String bezeichnung, String person, int daysToClean) {
+    public CleaningTask(String bezeichnung, String person, int daysToClean, boolean isCompleted) {
         this.bezeichnung = bezeichnung;
         this.person = person;
         this.daysToClean = daysToClean;
+        this.isCompleted = isCompleted;
+    }
+    public void setIsCompleted(){
+        this.isCompleted = true;
     }
 }
+
