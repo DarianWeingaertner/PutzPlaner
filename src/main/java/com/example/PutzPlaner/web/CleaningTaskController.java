@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -35,7 +36,7 @@ public class CleaningTaskController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CleaningTask> addCleaningTask(@Valid @RequestBody CleaningTask body) {
-        final CleaningTask c = new CleaningTask(body.getBezeichnung(),body.getPerson(), body.getDaysToClean());
+        final CleaningTask c = new CleaningTask(body.getBezeichnung(),body.getPerson(), body.getDaysToClean(), false);
         final CleaningTask createdCleaningTask = cleaningTaskService.addCleaningTask(c);
         return new ResponseEntity<>(createdCleaningTask, HttpStatus.CREATED);
     }
@@ -51,5 +52,16 @@ public class CleaningTaskController {
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteCleaningTask(@PathVariable("id") final Long id) {
         return cleaningTaskService.removeCleaningTask(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}/complete")
+    public ResponseEntity<CleaningTask> completeTask(@PathVariable("id") Long id) {
+        CleaningTask completedTask = cleaningTaskService.markTaskAsCompleted(id);
+        return completedTask != null ? ResponseEntity.ok(completedTask) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/completed")
+    public ResponseEntity<List<CleaningTask>> getCompletedTasks() {
+        return ResponseEntity.ok(cleaningTaskService.getCompletedTasks());
     }
 }
