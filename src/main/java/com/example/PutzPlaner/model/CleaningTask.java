@@ -18,7 +18,7 @@ public class CleaningTask {
     private String bezeichnung;
     private String person;
     private int daysToClean;
-    private boolean completed = false;
+    private boolean completed;
 
     public CleaningTask() {}
 

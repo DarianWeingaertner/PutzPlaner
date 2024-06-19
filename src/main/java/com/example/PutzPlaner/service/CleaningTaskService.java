@@ -46,10 +46,10 @@ public class CleaningTaskService {
         return exists;
     }
 
-    public CleaningTask markTaskAsCompleted(Long id) {
-        return repository.findById(id).map(task -> {
-            task.setCompleted(true);
-            return repository.save(task);
+    public CleaningTask markTaskAsCompleted(final Long id) {
+        return repository.findById(id).map(cleaningTask -> {
+            cleaningTask.setCompleted(true);
+            return repository.save(cleaningTask);
         }).orElse(null);
     }
 /*
