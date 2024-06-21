@@ -5,7 +5,6 @@ import com.example.PutzPlaner.persistence.CleaningTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -34,11 +33,17 @@ public class CleaningTaskService {
         return repository.save(cleaningTask);
     }
 
-    public CleaningTask editCleaningTask(final CleaningTask cleaningTask) {
-        return repository.existsById(cleaningTask.getId())
-                ? repository.save(cleaningTask)
-                : null;
+    public CleaningTask updateCleaningTask(Long id, CleaningTask updatedTask) {
+        return repository.findById(id)
+                .map(existingTask -> {
+                    existingTask.setBezeichnung(updatedTask.getBezeichnung());
+                    existingTask.setPerson(updatedTask.getPerson());
+                    existingTask.setDaysToClean(updatedTask.getDaysToClean());
+                    return repository.save(existingTask);
+                })
+                .orElse(null);
     }
+
 
     public boolean removeCleaningTask(final Long id) {
         final boolean exists = repository.existsById(id);

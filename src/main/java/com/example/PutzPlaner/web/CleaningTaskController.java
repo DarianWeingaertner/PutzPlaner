@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -43,10 +42,12 @@ public class CleaningTaskController {
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CleaningTask> updateCleaningTask(@PathVariable("id") final Long id, @RequestBody CleaningTask body) {
-        body.setId(id);
-        final CleaningTask updateCleaningTask = cleaningTaskService.editCleaningTask(body);
-        if (updateCleaningTask == null) return ResponseEntity.notFound().build();
-        else return ResponseEntity.ok(updateCleaningTask);
+        CleaningTask updatedTask = cleaningTaskService.updateCleaningTask(id, body);
+        if (updatedTask != null) {
+            return ResponseEntity.ok(updatedTask);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping(path = "/{id}")
