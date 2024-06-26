@@ -2,39 +2,54 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-    - name: Cache Docker layers
-      uses: actions/cache@v2
-      with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-buildx-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-buildx-
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-    - name: Login to DockerHub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
 
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/putzplaner:$(date +%s)
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Push the Docker image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/putzplaner:$(date +%s)
+      - name: Build the Docker image
+        run: |
+          docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/putzplaner:latest \
+          --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          --build-arg DB_URL=${{ secrets.DB_URL }} \
+          --build-arg DB_USER=${{ secrets.DB_USER }}
 
-    - name: Run tests in Docker container
-      run: docker run --rm ${{ secrets.DOCKER_USERNAME }}/putzplaner:$(date +%s) ./gradlew test
+      - name: Push the Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/putzplaner:latest
+
+      - name: Run tests in Docker container
+        run: |
+          docker run --rm \
+          -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          -e DB_URL=${{ secrets.DB_URL }} \
+          -e DB_USER=${{ secrets.DB_USER }} \
+          ${{ secrets.DOCKER_USERNAME }}/putzplaner:latest ./gradlew test
