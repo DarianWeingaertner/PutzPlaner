@@ -49,10 +49,8 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/putzplaner:latest \
-          --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-          --build-arg DB_URL=${{ secrets.DB_URL }} \
-          --build-arg DB_USER=${{ secrets.DB_USER }}
+        run: docker build . --file Dockerfile --tag ***/putzplaner:latest --build-arg DB_PASSWORD=*** --build-arg DB_URL=*** --build-arg DB_USER=***
+
 
       - name: Push the Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/putzplaner:latest
