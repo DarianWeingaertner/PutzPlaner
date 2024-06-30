@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,5 +35,17 @@ public class CleaningTaskRepositoryTest {
         repository.deleteById(savedTask.getId());
         Optional<CleaningTask> foundTask = repository.findById(savedTask.getId());
         assertThat(foundTask).isNotPresent();
+    }
+
+    @Test
+    public void testFindAll() {
+        CleaningTask task1 = new CleaningTask("Task 1", "Alice", 3);
+        CleaningTask task2 = new CleaningTask("Task 2", "Bob", 4);
+        repository.save(task1);
+        repository.save(task2);
+
+        List<CleaningTask> tasks = repository.findAll();
+        assertThat(tasks).hasSize(2);
+        assertThat(tasks).extracting(CleaningTask::getBezeichnung).containsExactlyInAnyOrder("Task 1", "Task 2");
     }
 }
