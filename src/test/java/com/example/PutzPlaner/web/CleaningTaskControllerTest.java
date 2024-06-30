@@ -35,4 +35,12 @@ public class CleaningTaskControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+    @Test
+    public void testGetCleaningTaskNotFound() throws Exception {
+        when(service.getCleaningTask(anyLong())).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/cleaningTasks/99")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 }
